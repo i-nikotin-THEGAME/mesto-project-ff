@@ -6,12 +6,13 @@ const contenuto = document.querySelector('.content');
 const elencoCarta = document.querySelector('.places__list');
 
 // @todo: Функция создания карточки
-function creareUnaCarta (unoCarta, rimozione) {
+function creareUnaCarta (setDiCarte, pulsanteCestinoEliminaScheda) {
     const nodoCarta = cartaTemplate.content.cloneNode(true);
-    nodoCarta.querySelector('.card__image').src = unoCarta.link;
-    nodoCarta.querySelector('.card__image').alt = unoCarta.name;
-    nodoCarta.querySelector('.card__title').textContent = unoCarta.name;
-    nodoCarta.querySelector('.card__delete-button').addEventListener('click', rimozione);
+    const cartaIllustrata = nodoCarta.querySelector('.card__image');
+    cartaIllustrata.src = setDiCarte.link;
+    cartaIllustrata.alt = setDiCarte.name;
+    nodoCarta.querySelector('.card__title').textContent = setDiCarte.name;
+    nodoCarta.querySelector('.card__delete-button').addEventListener('click', pulsanteCestinoEliminaScheda);
     nodoCarta.querySelector('.card__like-button').addEventListener('click', evt => {
         evt.target.classList.toggle('card__like-button_is-active');
     });
@@ -19,11 +20,11 @@ function creareUnaCarta (unoCarta, rimozione) {
 };
 
 // @todo: Функция удаления карточки
-function rimuovereLaCarta (rimozione) {
-    rimozione.target.parentElement.remove()
+function rimuovereLaCarta (pulsanteCestinoEliminaScheda) {
+    pulsanteCestinoEliminaScheda.target.closest('.places__item').remove()
 };
 
 // @todo: Вывести карточки на страницу
-initialCards.forEach(unoCarta => {
-    elencoCarta.append(creareUnaCarta(unoCarta, rimuovereLaCarta))
+initialCards.forEach(setDiCarte => {
+    elencoCarta.append(creareUnaCarta(setDiCarte, rimuovereLaCarta))
 });
