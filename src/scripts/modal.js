@@ -1,4 +1,5 @@
 const popups = document.querySelectorAll('.popup');
+const activePopup = document.querySelector('.popup_is-opened');
 
 // Функция открытия попапа
 export function openPopup (evt) {
@@ -15,9 +16,11 @@ export function closePopup (evt) {
 // Функция закрытия попапа по кнопке "Esc"
 function listenEsc (evt) {
     if (evt.key === 'Escape') {
-        // popups.forEach((popup) => {
-            closePopup(document.querySelector('.popup_is-opened'))
-        // });
+// Использозвание forEach тут для единообразия кода, т.к. такой же метод 
+// использовался и для закрытия popup по крестику или по оверлею.
+// Следовал задаче: Дайте пользователям возможность закрывать 
+// ЛЮБОЙ попап нажатием на клавишу Esc
+        closePopup(activePopup);
     };
 };
 
@@ -26,10 +29,10 @@ popups.forEach((popup) => {
     popup.classList.add('popup_is-animated');
     popup.addEventListener('mousedown', function(evt) {
         if (evt.target.classList.contains('popup__close')) {
-            closePopup(popup)
+            closePopup(popup);
         };
         if (evt.target === popup) {
-            closePopup(evt.target)
+            closePopup(evt.target);
         };
     });
 });
