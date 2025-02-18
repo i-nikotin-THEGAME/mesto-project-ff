@@ -1,27 +1,27 @@
 // Функция создания карточки 
-export function creareUnaCarta (setDiCarte, pulsanteCestinoEliminaScheda, pulsanteMiPiace, nodoIllustrata) {
-    const cartaTemplate = document.querySelector('#card-template');
-    const nodoCarta = cartaTemplate.content.cloneNode(true);
-    const cartaIllustrata = nodoCarta.querySelector('.card__image');
-    const cartaTesto = nodoCarta.querySelector('.card__title');
+export function createCard (dataCard, btnDelete, btnLike, elCardImg) {
+    const cardTemplate = document.querySelector('#card-template').content;
+    const nodeCard = cardTemplate.querySelector('.card').cloneNode(true);
+    const cardImage = nodeCard.querySelector('.card__image');
+    const cardTitle = nodeCard.querySelector('.card__title');
     
-    cartaIllustrata.src = setDiCarte.link;
-    cartaIllustrata.alt = setDiCarte.name;
-    cartaTesto.textContent = setDiCarte.name;
+    cardImage.src = dataCard.link;
+    cardImage.alt = dataCard.name;
+    cardTitle.textContent = dataCard.name;
     
-    nodoCarta.querySelector('.card__delete-button').addEventListener('click', pulsanteCestinoEliminaScheda);
-    nodoCarta.querySelector('.card__like-button').addEventListener('click', pulsanteMiPiace);
-    cartaIllustrata.addEventListener('click', nodoIllustrata);
+    nodeCard.querySelector('.card__delete-button').addEventListener('click', btnDelete);
+    nodeCard.querySelector('.card__like-button').addEventListener('click', btnLike);
+    cardImage.addEventListener('click', elCardImg);
     
-    return nodoCarta;
+    return nodeCard;
 };
 
 // Функция удаления карточки
-export function rimuovereLaCarta (evt) {
+export function deleteCard (evt) {
     evt.target.closest('.places__item').remove()
 };
 
 // Функция добавления лайка
-export function mettereCome (evt) {
+export function setLike (evt) {
     evt.target.classList.toggle('card__like-button_is-active');
 };

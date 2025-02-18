@@ -1,69 +1,66 @@
 import '../pages/index.css';
 import { initialCards } from '../scripts/cards.js';
-import { aprireIPopup, chiudiIPopup} from '../scripts/modal.js';
-import { creareUnaCarta, rimuovereLaCarta, mettereCome} from '../scripts/card.js';
+import { openPopup, closePopup} from '../scripts/modal.js';
+import { createCard, deleteCard, setLike} from '../scripts/card.js';
 
 // DOM узлы
-const elencoCarta = document.querySelector('.places__list');
+const placesForCards = document.querySelector('.places__list');
 
-const popupModifica = document.querySelector('.popup_type_edit');
-const popupNuovaMappa = document.querySelector('.popup_type_new-card');
-const popupImmagine = document.querySelector('.popup_type_image');
+const popupEditProfile = document.querySelector('.popup_type_edit');
+const popupAddNewCard = document.querySelector('.popup_type_new-card');
+const popupViewImage = document.querySelector('.popup_type_image');
+const elPopupImage = popupViewImage.querySelector('.popup__image');
+const elPopupCaption = popupViewImage.querySelector('.popup__caption');
 
-const nomeDiInput = document.querySelector('.profile__title');
-const descrizioneDiInput = document.querySelector('.profile__description');
+const titleProfile = document.querySelector('.profile__title');
+const descriptionProfile = document.querySelector('.profile__description');
 
-const pulsanteDiModifica = document.querySelector('.profile__edit-button');
-const pulsanteAggiungiCarta = document.querySelector('.profile__add-button');
+const btnEditProfile = document.querySelector('.profile__edit-button');
+const btnAddCard = document.querySelector('.profile__add-button');
 
-const moduloModificaProfilo = document.forms.editProfile;
-const moduloNuovoPosto = document.forms.newPlace;
+const formEditProfile = document.forms.editProfile;
+const formNewPlace = document.forms.newPlace;
 
 // Функция получения данных для открытия попапа с изображением
-function gestoreClicImmagine (evt) {
-    aprireIPopup(popupImmagine);
-    const popupConImmagine = popupImmagine.querySelector('.popup__image');
-    const popupConImmagineDescrizione = popupImmagine.querySelector('.popup__caption');
-    
-    popupConImmagine.src = evt.target.src;
-    popupConImmagineDescrizione.textContent = evt.target.alt;
+function getDataPopupImage (evt) {
+    openPopup(popupViewImage);
+    elPopupImage.src = evt.target.src;
+    elPopupCaption.textContent = evt.target.alt;
 };
 
-// Функция для кнопки Сохранить
-function gestireModuloInvia(evt) {
+// Функции для кнопки Сохранить
+function handleFormSubmitEditProfile(evt) {
     evt.preventDefault();
-    if (evt.target.closest('.popup_type_edit')) {
-        nomeDiInput.textContent = moduloModificaProfilo.elements.name.value;
-        descrizioneDiInput.textContent = moduloModificaProfilo.elements.description.value;
-        chiudiIPopup(evt.target.closest('.popup'))
-    };
-    if (evt.target.closest('.popup_type_new-card')) {
-        const nuovaCarta = {name: moduloNuovoPosto.elements.placeName.value, link: moduloNuovoPosto.elements.link.value};
-        
-        initialCards.unshift(nuovaCarta);
-        chiudiIPopup(evt.target.closest('.popup'));
-        elencoCarta.prepend(creareUnaCarta(initialCards[0], rimuovereLaCarta, mettereCome, gestoreClicImmagine))
-    };
+    titleProfile.textContent = formEditProfile.elements.name.value;
+    descriptionProfile.textContent = formEditProfile.elements.description.value;
+    closePopup(popupEditProfile);
+};
+
+function handleFormSubmitNewCard(evt) {
+    evt.preventDefault();
+    const dataNewPlace = {name: formNewPlace.elements.placeName.value, link: formNewPlace.elements.link.value};
+    closePopup(popupAddNewCard);
+    placesForCards.prepend(createCard(dataNewPlace, deleteCard, setLike, getDataPopupImage))
 };
 
 // Слушатель кнопки редактирования профиля
-pulsanteDiModifica.addEventListener('click', function(evt) {
-    aprireIPopup(popupModifica);
-    moduloModificaProfilo.elements.name.focus();
-    moduloModificaProfilo.elements.name.value = nomeDiInput.textContent;
-    moduloModificaProfilo.elements.description.value = descrizioneDiInput.textContent;
-    popupModifica.addEventListener('submit', gestireModuloInvia);
+btnEditProfile.addEventListener('click', function() {
+    openPopup(popupEditProfile);
+    formEditProfile.elements.name.focus();
+    formEditProfile.elements.name.value = titleProfile.textContent;
+    formEditProfile.elements.description.value = descriptionProfile.textContent;
+    popupEditProfile.addEventListener('submit', handleFormSubmitEditProfile);
 });
 
 // Слушатель кнопки добавления карточки
-pulsanteAggiungiCarta.addEventListener('click', function(evt) {
-    aprireIPopup(popupNuovaMappa);
-    moduloNuovoPosto.reset();
-    moduloNuovoPosto.elements.placeName.focus();
-    popupNuovaMappa.addEventListener('submit', gestireModuloInvia);
+btnAddCard.addEventListener('click', function() {
+    openPopup(popupAddNewCard);
+    formNewPlace.reset();
+    formNewPlace.elements.placeName.focus();
+    popupAddNewCard.addEventListener('submit', handleFormSubmitNewCard);
 });
 
 // Создаем карточки при загрузке страницы
 initialCards.forEach(setDiCarte => {
-    elencoCarta.append(creareUnaCarta(setDiCarte, rimuovereLaCarta, mettereCome, gestoreClicImmagine))
+    placesForCards.append(createCard(setDiCarte, deleteCard, setLike, getDataPopupImage))
 });

@@ -1,35 +1,35 @@
-const popupi = document.querySelectorAll('.popup');
+const popups = document.querySelectorAll('.popup');
 
 // Функция открытия попапа
-export function aprireIPopup (evt) {
+export function openPopup (evt) {
     evt.classList.add('popup_is-opened');
-    document.addEventListener('keydown', chiaveDelGestore);
+    document.addEventListener('keydown', listenEsc);
 };
 
 // Функция закрытия попапа
-export function chiudiIPopup (evt) {
+export function closePopup (evt) {
     evt.classList.remove('popup_is-opened');
-    document.removeEventListener('keydown', chiaveDelGestore);
+    document.removeEventListener('keydown', listenEsc);
 };
 
 // Функция закрытия попапа по кнопке "Esc"
-function chiaveDelGestore (evt) {
+function listenEsc (evt) {
     if (evt.key === 'Escape') {
-        popupi.forEach((popup) => {
-            chiudiIPopup(popup)
-        });
+        // popups.forEach((popup) => {
+            closePopup(document.querySelector('.popup_is-opened'))
+        // });
     };
 };
 
 // Слушатель для закрытия popup
-popupi.forEach((popup) => {
+popups.forEach((popup) => {
     popup.classList.add('popup_is-animated');
     popup.addEventListener('mousedown', function(evt) {
         if (evt.target.classList.contains('popup__close')) {
-            chiudiIPopup(popup)
+            closePopup(popup)
         };
         if (evt.target === popup) {
-            chiudiIPopup(evt.target)
+            closePopup(evt.target)
         };
     });
 });
