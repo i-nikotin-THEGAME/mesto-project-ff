@@ -25,6 +25,7 @@ const formNewPlace = document.forms.newPlace;
 function getDataPopupImage (evt) {
     openPopup(popupViewImage);
     elPopupImage.src = evt.target.src;
+    elPopupImage.alt = evt.target.alt;
     elPopupCaption.textContent = evt.target.alt;
 };
 
