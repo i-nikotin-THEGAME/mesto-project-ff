@@ -1,7 +1,9 @@
 import { deletePlace, putLike, deleteLike } from '../scripts/api.js';
 
-// Функция создания карточки 
-export function createCard(dataCard, btnDelete, btnLike, elCardImg) {
+// Функция создания карточки
+// Каждый ревьюер делает замечание по своему. 
+// Но сейчас я исправляю код в соответствии с Вашими замечаниями
+export function createCard(dataCard, handleDeleteCard, handleLike, elCardImg) {
     const cardTemplate = document.querySelector('#card-template').content;
     const nodeCard = cardTemplate.querySelector('.card').cloneNode(true);
     const cardImage = nodeCard.querySelector('.card__image');
@@ -14,28 +16,30 @@ export function createCard(dataCard, btnDelete, btnLike, elCardImg) {
     cardImage.alt = dataCard.card.name;
     cardTitle.textContent = dataCard.card.name;
     cardBtnLike.id = dataCard.card._id;
+    cardBtnDelete.id = dataCard.card._id;
 
     cardBtnDelete.remove();
-    cardBtnLike.addEventListener('click', btnLike);
+    cardBtnLike.addEventListener('click', () => handleLike(cardBtnLike, likeCounter));
     cardImage.addEventListener('click', elCardImg);
     likeCounter.textContent = dataCard.card.likes.length;
 
-    const hasLikesIdOwnerIid = dataCard.card.likes.some((likes) => likes._id === dataCard.profile._id);
-    if (hasLikesIdOwnerIid) {
+    const hasLikesIdProfileId = dataCard.card.likes.some((likes) => likes._id === dataCard.profileId);
+    if (hasLikesIdProfileId) {
         cardBtnLike.classList.toggle('card__like-button_is-active')
     }
 
-    if (dataCard.card.owner._id === dataCard.profile._id) {
+    const hasOwnerIdProfileId = dataCard.card.owner._id === dataCard.profileId
+    // console.log(dataCard.profileId)
+    if (hasOwnerIdProfileId) {
         cardImage.after(cardBtnDelete)
-        cardBtnDelete.addEventListener('click', btnDelete);
-        cardBtnDelete.id = dataCard.card._id;
+        cardBtnDelete.addEventListener('click', handleDeleteCard);
     }
 
     return nodeCard;
 };
 
 // Функция удаления карточки
-export function deleteCard(evt) {
+export function handleDeleteCard(evt) {
     deletePlace(evt.target.id)
         .then((res) => {
             evt.target.closest('.places__item').remove()
@@ -46,21 +50,21 @@ export function deleteCard(evt) {
 };
 
 // Функция добавления лайка
-export function setLike(evt) {
-    if (!evt.target.classList.contains('card__like-button_is-active')) {
-        putLike(evt.target.id)
+export function handleLike(cardBtnLike, likeCounter) {
+    if (!cardBtnLike.classList.contains('card__like-button_is-active')) {
+        putLike(cardBtnLike.id)
             .then((res) => {
-                evt.target.classList.toggle('card__like-button_is-active');
-                evt.target.nextElementSibling.textContent = res.likes.length
+                cardBtnLike.classList.toggle('card__like-button_is-active');
+                likeCounter.textContent = res.likes.length
             })
             .catch((err) => {
                 console.log('Ошибка. Запрос не выполнен: ', err);
             })
     } else {
-        deleteLike(evt.target.id)
+        deleteLike(cardBtnLike.id)
             .then((res) => {
-                evt.target.classList.toggle('card__like-button_is-active');
-                evt.target.nextElementSibling.textContent = res.likes.length
+                cardBtnLike.classList.toggle('card__like-button_is-active');
+                likeCounter.textContent = res.likes.length
             })
             .catch((err) => {
                 console.log('Ошибка. Запрос не выполнен: ', err);

@@ -1,5 +1,3 @@
-const popups = document.querySelectorAll('.popup');
-
 // Функция открытия попапа
 export function openPopup(evt) {
     evt.classList.add('popup_is-opened');
@@ -19,15 +17,13 @@ function listenEsc(evt) {
     };
 };
 
-// Слушатель для закрытия попапа по "Крестику" и по оверлею
-popups.forEach((popup) => {
-    popup.classList.add('popup_is-animated');
-    popup.addEventListener('mousedown', function (evt) {
-        if (evt.target.classList.contains('popup__close')) {
-            closePopup(popup);
-        };
-        if (evt.target === popup) {
-            closePopup(evt.target);
-        };
-    });
-});
+// Из чек-листа следует:
+// в файле modal.js описаны функции для работы с модальными окнами: 
+// функция открытия модального окна, 
+// функция закрытия модального окна, 
+// функция-обработчик события нажатия Esc и 
+// функция-обработчик события клика по оверлею;
+
+// В данном файле я реализовал поведение модальных окон, это поведение тоже описано в чек-листе.
+// Видимо все таки forEach планировался разработчиком в этом модуле.
+// Но я исправил все по Вашему замечанию. Так как все таки верно будет?

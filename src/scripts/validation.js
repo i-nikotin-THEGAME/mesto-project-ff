@@ -1,12 +1,3 @@
-export const validationConfig = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__button",
-  inactiveButtonClass: "popup__button_disabled",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
-};
-
 // Валидация форм
 
 const showInputError = (formElement, inputElement, errorMessage, validationConfig) => {
@@ -23,8 +14,17 @@ const hideInputError = (formElement, inputElement, validationConfig) => {
   errorElement.textContent = '';
 };
 
+const checkRegex = (inputElement, validationConfig) => {
+  const regexTypeText = validationConfig.inputValidationPatternTypeText;
+  if (inputElement.type === "text" && inputElement.value) {
+    return regexTypeText.test(inputElement.value)
+  }
+  return true;
+}
+
 const checkInputValidity = (formElement, inputElement, validationConfig) => {
-  if (inputElement.validity.patternMismatch) {
+  const isRegex = checkRegex(inputElement, validationConfig);
+  if (!isRegex) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
   } else {
     inputElement.setCustomValidity("");
@@ -59,6 +59,9 @@ export const enableValidation = (validationConfig) => {
 };
 
 function hasInvalidInput(inputList) {
+  if (inputList.value = inputList.value) {
+    return inputElement.validity.valid;
+  }
   return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
   });

@@ -6,29 +6,27 @@ const apiConfig = {
     }
 };
 
+const checkResponse = (res) => {
+    // console.log(res)
+    if (res.ok) {
+        return res.json();
+    }
+    return Promise.reject(`Ошибка: ${res.status}`);
+};
+
 // Загрузка карточек с сервера GET
 export const getInitialCards = () => {
     return fetch(`${apiConfig.baseUrl}cards`, {
         headers: apiConfig.headers
     })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        });
+        .then(checkResponse);
 };
 
 export const getInitialEditProfile = () => {
     return fetch(`${apiConfig.baseUrl}users/me`, {
         headers: apiConfig.headers
     })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        });
+        .then(checkResponse);
 };
 
 // Редактирование профиля PATCH
@@ -41,12 +39,7 @@ export const patchEditProfile = (newDateProfile) => {
             about: newDateProfile.about,
         })
     })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        });
+        .then(checkResponse);
 };
 
 // Добавление новой карточки POST
@@ -59,12 +52,7 @@ export const patchNewCard = (newPlace) => {
             link: newPlace.link,
         })
     })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        });
+        .then(checkResponse);
 };
 
 // Удаление карточки DELETE
@@ -73,12 +61,7 @@ export const deletePlace = (idBtnDelete) => {
         method: "DELETE",
         headers: apiConfig.headers
     })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        });
+        .then(checkResponse);
 };
 
 // Постановка лайка PUT
@@ -87,12 +70,7 @@ export const putLike = (idImage) => {
         method: "PUT",
         headers: apiConfig.headers
     })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        });
+        .then(checkResponse);
 };
 
 // Снятие лайка DELETE
@@ -101,12 +79,7 @@ export const deleteLike = (idImage) => {
         method: "DELETE",
         headers: apiConfig.headers
     })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        });
+        .then(checkResponse);
 };
 
 // Обновление аватара пользователя PATCH
@@ -118,10 +91,5 @@ export const patchLinkAvatar = (linkAvatar) => {
             avatar: linkAvatar
         })
     })
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-            return Promise.reject(`Ошибка: ${res.status}`);
-        });
+        .then(checkResponse);
 };
